@@ -1,4 +1,31 @@
 version: "3"
 
+silent: true
+
 tasks:
-  default: stow */
+  default:
+    - |
+      stow */
+      touch hardlinks.json
+      task create-hardlinks
+
+  create-hardlinks:
+    - |
+      file="hardlinks.json"
+      if [ ! -f "$file" ]; then
+        echo "hardlinks.json not found!"
+        exit 1
+      fi
+
+      jq -c '.[]' "$file" | while read -r item; do
+        src=$(echo "$item" | jq -r '.source')
+        tgt=$(echo "$item" | jq -r '.target')
+
+        tgt_expanded=$(eval echo "$tgt")
+        mkdir -p "$tgt_expanded"
+
+        filename=$(basename "$src")
+
+        ln -f "$src" "${tgt_expanded%/}/$filename"
+        echo "Linked $src -> ${tgt_expanded%/}/$filename"
+      done
