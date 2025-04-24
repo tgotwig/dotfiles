@@ -6,6 +6,8 @@ tasks:
   default:
     - |
       stow */
+      task list-softlinks
+      echo =============================
       touch hardlinks.json
       task create-hardlinks
 
@@ -29,3 +31,8 @@ tasks:
         ln -f "$src" "${tgt_expanded%/}/$filename"
         echo "Linked $src -> ${tgt_expanded%/}/$filename"
       done
+
+  list-softlinks:
+    - |
+      ls -l ~/.config/micro/settings.json
+      ls -l ~/.config/starship.toml
