@@ -34,5 +34,7 @@ tasks:
 
   list-softlinks:
     - |
+      ls -l ~/.config/lsd/colors.yaml
+      ls -l ~/.config/lsd/config.yaml
       ls -l ~/.config/micro/settings.json
       ls -l ~/.config/starship.toml
